@@ -18,6 +18,19 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.checkBody = (req, res, next) => {
+  const { name, address, ranking, room_price } = req.body;
+
+  if (!name || !address || !ranking || !room_price) {
+    return res.status(400).json({
+      status: "Failed",
+      message: "Please fill all required fields",
+    });
+  }
+
+  next();
+};
+
 // Get all hotels
 exports.getAllHotels = (req, res) => {
   res.status(200).json({
@@ -50,8 +63,33 @@ exports.getHotel = (req, res) => {
   });
 };
 
-exports.createHotel = () => {
-  console.log("Hotel created");
+exports.createHotel = (req, res) => {
+  console.log("Request body:", req.body); // Log the incoming payload
+
+  const newId = hotels[hotels.length - 1].id + 1;
+  const newHotel = Object.assign({ id: newId }, req.body);
+
+  hotels.push(newHotel);
+
+  fs.writeFile(
+    `${__dirname}/../data/hotels.json`,
+    JSON.stringify(hotels),
+    (err) => {
+      if (err) {
+        return res.status(500).json({
+          status: "Failed",
+          message: "Failed to save data",
+        });
+      }
+
+      res.status(201).json({
+        status: "success",
+        data: {
+          hotels: newHotel,
+        },
+      });
+    }
+  );
 };
 
 exports.updateHotel = () => {
