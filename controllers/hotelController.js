@@ -92,10 +92,16 @@ exports.createHotel = (req, res) => {
   );
 };
 
-exports.updateHotel = () => {
-  console.log("Update hotel");
+exports.updateHotel = (req, res) => {
+  res.status(200).json({
+    status: "Success",
+    hotel: "<Updated hotel>",
+  });
 };
 
-exports.deleteHotel = () => {
-  console.log("Delete hotel");
+exports.deleteHotel = (req, res) => {
+  res.status(204).json({
+    status: "Success",
+    message: null,
+  });
 };
