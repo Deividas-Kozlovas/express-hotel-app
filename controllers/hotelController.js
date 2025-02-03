@@ -2,7 +2,6 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 
 const Hotel = require("./../models/hotelModel");
-const { response } = require("../app");
 
 const hotels = JSON.parse(fs.readFileSync(`${__dirname}/../data/hotels.json`));
 
