@@ -1,5 +1,6 @@
 const express = require("express");
 const hotelController = require("./../controllers/hotelController");
+const authController = require("./../controllers/authController");
 
 const router = express.Router();
 
@@ -7,7 +8,7 @@ router.param("id", hotelController.checkID);
 
 router
   .route("/")
-  .get(hotelController.getAllHotels)
+  .get(authController.protect ,hotelController.getAllHotels)
   .post(hotelController.checkBody, hotelController.createHotel);
 
 router
