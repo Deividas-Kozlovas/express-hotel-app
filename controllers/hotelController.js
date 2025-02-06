@@ -1,5 +1,6 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
+const APIFeatures = require("./../utilities/apiTooles");
 
 const Hotel = require("./../models/hotelModel");
 
@@ -47,7 +48,15 @@ exports.checkBody = (req, res, next) => {
 // Get all hotels
 exports.getAllHotels = async (req, res) => {
   try {
-    const hotels = await Hotel.find();
+    // const hotels = await Hotel.find();
+    const hotelsData = new APIFeatures(Hotel.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const hotels = await hotelsData.query;
+
     res.status(200).json({
       results: hotels.length,
       data: {
@@ -57,7 +66,7 @@ exports.getAllHotels = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: "Failed",
-      message: err,
+      message: err.message,
     });
   }
 };
